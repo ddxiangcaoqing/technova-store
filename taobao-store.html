@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechNova Store - 科技数码优选店铺</title>
+<style>
+  :root {
+    --bg-primary: #0a0e14;
+    --bg-secondary: #12161e;
+    --bg-card: #181c24;
+    --border: #242830;
+    --accent: #00d4ff;
+    --accent-glow: rgba(0, 212, 255, 0.15);
+    --accent2: #6c5ce7;
+    --text-primary: #e8eaed;
+    --text-secondary: #9aa0a6;
+    --text-muted: #5f6368;
+    --danger: #ff5252;
+    --success: #00e676;
+    --warning: #ffab00;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ===== 顶部工具栏 ===== */
+  .top-bar {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 36px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .top-bar a { color: var(--text-secondary); text-decoration: none; margin-left: 16px; transition: color .2s; }
+  .top-bar a:hover { color: var(--accent); }
+
+  /* ===== 主头部 ===== */
+  .main-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .logo {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    white-space: nowrap;
+  }
+  .logo .tech { color: var(--accent); }
+  .logo .nova { color: var(--text-primary); }
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .search-box {
+    flex: 1;
+    max-width: 560px;
+    display: flex;
+    position: relative;
+  }
+  .search-box input {
+    flex: 1;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 20px 0 0 20px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    transition: border .2s;
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box button {
+    height: 40px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    background: var(--accent);
+    color: var(--bg-primary);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .search-box button:hover { opacity: .85; }
+
+  .header-actions { display: flex; gap: 20px; align-items: center; }
+  .cart-btn {
+    position: relative;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cart-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--danger);
+    color: #fff;
+    font-size: 11px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  /* ===== 分类导航 ===== */
+  .nav-bar {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+  }
+  .nav-bar a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+  }
+  .nav-bar a:hover, .nav-bar a.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ===== 轮播横幅 ===== */
+  .hero {
+    margin: 24px 24px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    height: 340px;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1a0a2e 50%, #0a1628 100%);
+  }
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+    opacity: 0;
+    transition: opacity .6s;
+  }
+  .hero-slide.active { opacity: 1; }
+  .hero-text h2 {
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .hero-text h2 span { color: var(--accent); }
+  .hero-text p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    max-width: 420px;
+  }
+  .hero-cta {
+    display: inline-block;
+    padding: 10px 28px;
+    background: var(--accent);
+    color: var(--bg-primary);
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px var(--accent-glow);
+  }
+  .hero-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+  .hero-dots button {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,.3);
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .hero-dots button.active { background: var(--accent); }
+
+  /* ===== 区块标题 ===== */
+  .section {
+    padding: 32px 24px;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .section-title .icon {
+    width: 4px; height: 24px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .section-title h3 { font-size: 20px; font-weight: 700; }
+  .section-title .more {
+    margin-left: auto;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .section-title .more:hover { color: var(--accent); }
+
+  /* ===== 商品卡片网格 ===== */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+    cursor: pointer;
+    position: relative;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.08);
+  }
+  .product-card .img-wrap {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    font-size: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-card .img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, var(--bg-card));
+  }
+  .product-card .tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag-hot  { background: var(--danger); color: #fff; }
+  .tag-new  { background: var(--accent); color: var(--bg-primary); }
+  .tag-sale { background: var(--warning); color: #000; }
+
+  .product-card .info {
+    padding: 14px;
+  }
+  .product-card .name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    /* 两行截断 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .product-card .meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .product-card .price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--danger);
+  }
+  .product-card .price .unit { font-size: 13px; font-weight: 400; }
+  .product-card .old-price {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+  .product-card .sales {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .product-card .shop {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .add-cart-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px 0;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .add-cart-btn:hover {
+    background: var(--accent);
+    color: var(--bg-primary);
+  }
+
+  /* ===== 电子产品特色板块 ===== */
+  .electronics-feature {
+    margin: 0 24px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .feature-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.06);
+  }
+  .feature-icon {
+    font-size: 56px;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .feature-info h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .feature-info p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .feature-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .feature-tag {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+  }
+
+  /* ===== 推荐版块（大图横幅） ===== */
+  .promo-row {
+    margin: 0 24px 32px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+  }
+  .promo-big, .promo-small {
+    border-radius: var(--radius);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    min-height: 180px;
+  }
+  .promo-big {
+    background: linear-gradient(135deg, #1a0033 0%, #001a33 100%);
+    border: 1px solid rgba(108, 92, 231, 0.3);
+  }
+  .promo-small {
+    background: linear-gradient(135deg, #0a1a2a 0%, #1a0a20 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+  }
+  .promo-big h4, .promo-small h4 { font-size: 22px; margin-bottom: 8px; }
+  .promo-big p, .promo-small p { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+  .promo-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .promo-link:hover { text-decoration: underline; }
+
+  /* ===== 分类快选 ===== */
+  .quick-cats {
+    margin: 0 24px 32px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+  .quick-cat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+  .quick-cat:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .quick-cat .cat-icon { font-size: 32px; margin-bottom: 8px; }
+  .quick-cat .cat-name { font-size: 13px; font-weight: 500; }
+
+  /* ===== 购物车侧栏 ===== */
+  .cart-sidebar {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 380px;
+    height: 100vh;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border);
+    z-index: 200;
+    transition: right .3s;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 24px rgba(0,0,0,.5);
+  }
+  .cart-sidebar.open { right: 0; }
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 199;
+    display: none;
+  }
+  .cart-overlay.open { display: block; }
+  .cart-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cart-header h4 { font-size: 16px; }
+  .cart-close {
+    background: none; border: none;
+    color: var(--text-secondary);
+    font-size: 22px;
+    cursor: pointer;
+  }
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  .cart-empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 60px 20px;
+    font-size: 14px;
+  }
+  .cart-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .cart-item .ci-icon {
+    font-size: 32px;
+    width: 50px;
+    text-align: center;
+  }
+  .cart-item .ci-info { flex: 1; min-width: 0; }
+  .cart-item .ci-name {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cart-item .ci-price { color: var(--danger); font-weight: 600; font-size: 14px; margin-top: 4px; }
+  .cart-item .ci-qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .ci-qty button {
+    width: 24px; height: 24px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .ci-qty span { font-size: 13px; min-width: 20px; text-align: center; }
+  .cart-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .cart-total .amount { color: var(--danger); font-size: 20px; }
+  .checkout-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    color: var(--bg-primary);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .checkout-btn:hover { opacity: .85; }
+
+  /* ===== Toast ===== */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--success);
+    color: #000;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 300;
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  /* ===== 页脚 ===== */
+  .footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 32px 24px;
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .footer h5 {
+    font-size: 14px;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .footer a {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 6px;
+    transition: color .2s;
+  }
+  .footer a:hover { color: var(--accent); }
+  .footer-bottom {
+    text-align: center;
+    padding: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ===== 登录/注册模态框 ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 400px;
+    max-width: 90vw;
+    padding: 32px 28px;
+    position: relative;
+    box-shadow: 0 16px 48px rgba(0,0,0,.6);
+    transform: translateY(12px);
+    transition: transform .25s;
+  }
+  .modal-overlay.open .modal {
+    transform: translateY(0);
+  }
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 22px;
+    cursor: pointer;
+    transition: color .2s;
+  }
+  .modal-close:hover { color: var(--text-primary); }
+  .modal h3 {
+    font-size: 22px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .modal h3 span { color: var(--accent); }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .form-group input {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    transition: border .2s;
+  }
+  .form-group input:focus { border-color: var(--accent); }
+  .form-submit {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    color: var(--bg-primary);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity .2s;
+  }
+  .form-submit:hover { opacity: .85; }
+  .modal-switch {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .modal-switch a {
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .modal-switch a:hover { text-decoration: underline; }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 1024px) {
+    .electronics-feature { grid-template-columns: 1fr; }
+    .promo-row { grid-template-columns: 1fr; }
+    .quick-cats { grid-template-columns: repeat(3, 1fr); }
+    .footer { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .main-header { flex-wrap: wrap; gap: 12px; padding: 12px; }
+    .search-box { order: 3; max-width: none; flex: 100%; }
+    .hero { margin: 12px; height: 240px; }
+    .hero-slide { padding: 0 24px; }
+    .hero-text h2 { font-size: 24px; }
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .quick-cats { grid-template-columns: repeat(2, 1fr); }
+    .section { padding: 20px 12px; }
+    .footer { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部工具栏 ===== -->
+<div class="top-bar">
+  <span>欢迎来到 TechNova Store</span>
+  <div>
+    <a href="#" onclick="openModal('login'); return false;">登录</a><a href="#" onclick="openModal('register'); return false;">注册</a><a href="#">我的订单</a><a href="#">客服</a>
+  </div>
+</div>
+
+<!-- ===== 主头部 ===== -->
+<header class="main-header">
+  <div>
+    <div class="logo"><span class="tech">Tech</span><span class="nova">Nova</span></div>
+    <div class="logo-sub">Personal Store</div>
+  </div>
+  <div class="search-box">
+    <input type="text" placeholder="搜索商品：键盘、耳机、显示器、显卡...">
+    <button>搜索</button>
+  </div>
+  <div class="header-actions">
+    <button class="cart-btn" onclick="toggleCart()" id="cartBtn">
+      🛒 购物车 <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== 分类导航 ===== -->
+<nav class="nav-bar">
+  <a href="#" class="active">首页</a>
+  <a href="#electronics">电子产品</a>
+  <a href="#">电脑配件</a>
+  <a href="#">智能穿戴</a>
+  <a href="#">影音娱乐</a>
+  <a href="#">办公设备</a>
+  <a href="#">手机数码</a>
+  <a href="#">二手好物</a>
+</nav>
+
+<!-- ===== 轮播横幅 ===== -->
+<div class="hero">
+  <div class="hero-slide active">
+    <div class="hero-text">
+      <h2>2026 新品首发<br><span>智能电动滑板车 S1</span></h2>
+      <p>35km 续航 · 三档变速 · APP 智控 · 折叠收纳</p>
+      <a href="#" class="hero-cta">立即抢购</a>
+    </div>
+  </div>
+  <div class="hero-slide">
+    <div class="hero-text">
+      <h2>无线降噪耳机<br><span>ProBuds X3</span></h2>
+      <p>主动降噪 · 40h 续航 · Hi-Res 认证 · 低延迟</p>
+      <a href="#" class="hero-cta">了解详情</a>
+    </div>
+  </div>
+  <div class="hero-slide">
+    <div class="hero-text">
+      <h2>电竞显示器<br><span>27" 2K 240Hz</span></h2>
+      <p>Fast-IPS · 1ms 响应 · HDR600 · G-Sync</p>
+      <a href="#" class="hero-cta">立即抢购</a>
+    </div>
+  </div>
+  <div class="hero-dots">
+    <button class="active" onclick="goSlide(0)"></button>
+    <button onclick="goSlide(1)"></button>
+    <button onclick="goSlide(2)"></button>
+  </div>
+</div>
+
+<!-- ===== 分类快选 ===== -->
+<div class="section">
+  <div class="quick-cats">
+    <a class="quick-cat" href="#"><div class="cat-icon">💻</div><div class="cat-name">笔记本电脑</div></a>
+    <a class="quick-cat" href="#"><div class="cat-icon">📱</div><div class="cat-name">智能手机</div></a>
+    <a class="quick-cat" href="#"><div class="cat-icon">🎧</div><div class="cat-name">耳机音箱</div></a>
+    <a class="quick-cat" href="#"><div class="cat-icon">⌨️</div><div class="cat-name">键盘鼠标</div></a>
+    <a class="quick-cat" href="#"><div class="cat-icon">🎮</div><div class="cat-name">游戏装备</div></a>
+    <a class="quick-cat" href="#"><div class="cat-icon">📷</div><div class="cat-name">相机摄影</div></a>
+  </div>
+</div>
+
+<!-- ===== 🎯 电子产品介绍板块 ===== -->
+<div class="section" id="electronics">
+  <div class="section-title">
+    <div class="icon"></div>
+    <h3>电子产品臻选</h3>
+    <a href="#" class="more">查看全部 →</a>
+  </div>
+  <div class="electronics-feature">
+    <div class="feature-card">
+      <div class="feature-icon">💻</div>
+      <div class="feature-info">
+        <h4>高性能笔记本</h4>
+        <p>搭载最新Intel Core Ultra / AMD Ryzen 8000系列处理器，轻薄设计兼顾强劲性能。适合办公、创作与轻度游戏，续航长达12小时。</p>
+        <div class="feature-tags">
+          <span class="feature-tag">酷睿Ultra</span>
+          <span class="feature-tag">2.5K屏</span>
+          <span class="feature-tag">16GB+1TB</span>
+          <span class="feature-tag">轻薄本</span>
+        </div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎧</div>
+      <div class="feature-info">
+        <h4>无线降噪耳机</h4>
+        <p>主动降噪深度达-48dB，支持LDAC高清传输。40小时总续航，快充10分钟聆听3小时。触控操作，多设备无缝切换。</p>
+        <div class="feature-tags">
+          <span class="feature-tag">ANC降噪</span>
+          <span class="feature-tag">Hi-Res</span>
+          <span class="feature-tag">蓝牙5.3</span>
+          <span class="feature-tag">IPX5防水</span>
+        </div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🖥️</div>
+      <div class="feature-info">
+        <h4>电竞显示器</h4>
+        <p>27英寸Fast-IPS面板，2K分辨率搭配240Hz刷新率。1ms GTG响应时间，支持G-Sync & FreeSync，HDR600认证，出厂校色ΔE＜2。</p>
+        <div class="feature-tags">
+          <span class="feature-tag">2K 240Hz</span>
+          <span class="feature-tag">Fast-IPS</span>
+          <span class="feature-tag">1ms响应</span>
+          <span class="feature-tag">HDR600</span>
+        </div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⌨️</div>
+      <div class="feature-info">
+        <h4>机械键盘</h4>
+        <p>Gasket结构，全键热插拔，支持三模连接。PBT双色键帽，轴体可选红/茶/青。RGB背光，内置4000mAh电池，续航持久。</p>
+        <div class="feature-tags">
+          <span class="feature-tag">Gasket</span>
+          <span class="feature-tag">三模</span>
+          <span class="feature-tag">热插拔</span>
+          <span class="feature-tag">RGB</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 促销板块 ===== -->
+<div class="promo-row">
+  <div class="promo-big">
+    <h4>💥 显卡专场 · 限时特惠</h4>
+    <p>RTX 4060 / RX 7800 XT 全系现货，下单立减200元，赠装机工具包</p>
+    <a href="#" class="promo-link">去抢购 →</a>
+  </div>
+  <div class="promo-small">
+    <h4>🔥 智能穿戴新品</h4>
+    <p>智能手表 / 手环 全场 9 折</p>
+    <a href="#" class="promo-link">立即查看 →</a>
+  </div>
+</div>
+
+<!-- ===== 热门商品 ===== -->
+<div class="section">
+  <div class="section-title">
+    <div class="icon"></div>
+    <h3>热门推荐</h3>
+    <a href="#" class="more">更多好物 →</a>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</div>
+
+<!-- ===== 购物车遮罩 ===== -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- ===== 购物车侧栏 ===== -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h4>🛒 购物车</h4>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">购物车是空的</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>合计</span>
+      <span class="amount" id="cartTotal">¥0.00</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">去结算</button>
+  </div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== 登录 / 注册模态框 ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <!-- 登录表单 -->
+  <div class="modal" id="loginModal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>登录 <span>TechNova</span></h3>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>手机号 / 用户名</label>
+        <input type="text" id="loginUser" placeholder="请输入手机号或用户名" required>
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" id="loginPass" placeholder="请输入密码" required>
+      </div>
+      <button type="submit" class="form-submit">登 录</button>
+    </form>
+    <div class="modal-switch">
+      还没有账号？<a onclick="switchModal('register')">立即注册</a>
+    </div>
+  </div>
+
+  <!-- 注册表单 -->
+  <div class="modal" id="registerModal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>注册 <span>TechNova</span></h3>
+    <form onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label>用户名</label>
+        <input type="text" id="regUser" placeholder="请输入用户名" required>
+      </div>
+      <div class="form-group">
+        <label>手机号</label>
+        <input type="tel" id="regPhone" placeholder="请输入手机号" required>
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" id="regPass" placeholder="请设置密码（6-16位）" minlength="6" maxlength="16" required>
+      </div>
+      <div class="form-group">
+        <label>确认密码</label>
+        <input type="password" id="regPass2" placeholder="请再次输入密码" minlength="6" maxlength="16" required>
+      </div>
+      <button type="submit" class="form-submit">注 册</button>
+    </form>
+    <div class="modal-switch">
+      已有账号？<a onclick="switchModal('login')">去登录</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 页脚 ===== -->
+<footer>
+  <div class="footer">
+    <div>
+      <h5>TechNova Store</h5>
+      <p>专注科技数码产品，严选好物，品质保障。<br>7天无理由退换 · 正品保证 · 急速发货</p>
+    </div>
+    <div>
+      <h5>购物指南</h5>
+      <a href="#">购物流程</a><a href="#">会员介绍</a><a href="#">常见问题</a><a href="#">联系客服</a>
+    </div>
+    <div>
+      <h5>服务保障</h5>
+      <a href="#">正品保证</a><a href="#">7天退换</a><a href="#">退货流程</a><a href="#">投诉建议</a>
+    </div>
+    <div>
+      <h5>关注我们</h5>
+      <a href="#">关于店铺</a><a href="#">新浪微博</a><a href="#">微信公众号</a><a href="#">加入社群</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 TechNova Store · 个人店铺 · 仅供演示
+  </div>
+</footer>
+
+<script>
+// ===== 商品数据 =====
+const products = [
+  { icon:'⌨️', name:'Acer 幻影骑士 · 机械键盘 Gasket 三模热插拔 RGB', price:349, oldPrice:499, sold:2389, tag:'hot', tagText:'热卖' },
+  { icon:'🖱️', name:'Logitech G Pro X Superlight 2 无线游戏鼠标', price:899, oldPrice:1199, sold:1567, tag:'sale', tagText:'促销' },
+  { icon:'🎧', name:'Sony WF-1000XM5 真无线降噪耳机 黑色', price:1499, oldPrice:1999, sold:4210, tag:'hot', tagText:'爆款' },
+  { icon:'💻', name:'ThinkBook 14+ 2026 锐龙版 R7 32G 1TB 2.8K屏', price:5499, oldPrice:6299, sold:892, tag:'new', tagText:'新品' },
+  { icon:'🖥️', name:'HKC 27英寸 Fast-IPS 2K 240Hz 电竞显示器', price:1599, oldPrice:1999, sold:3201, tag:'sale', tagText:'促销' },
+  { icon:'📱', name:'iPhone 15 Pro Max 256GB 原色钛金属 国行', price:8999, oldPrice:9999, sold:678, tag:'hot', tagText:'热卖' },
+  { icon:'🎮', name:'Nintendo Switch OLED 马力欧红蓝 续航版', price:1899, oldPrice:2199, sold:5421, tag:'hot', tagText:'爆款' },
+  { icon:'🔊', name:'漫步者 S880 2.0有源音箱 Hi-Res 蓝牙5.0', price:799, oldPrice:999, sold:1569, tag:'new', tagText:'新品' },
+  { icon:'💾', name:'Samsung 990 PRO 2TB NVMe M.2 SSD 读取7450MB/s', price:1099, oldPrice:1399, sold:1980, tag:'sale', tagText:'促销' },
+  { icon:'📷', name:'DJI Pocket 3 灵眸口袋云台相机 1英寸CMOS', price:3499, oldPrice:3899, sold:2340, tag:'new', tagText:'新品' },
+  { icon:'⌚', name:'Apple Watch Ultra 2 钛金属 橙色高山回环', price:5999, oldPrice:6499, sold:445, tag:'hot', tagText:'热卖' },
+  { icon:'🔋', name:'Anker 737 充电宝 24000mAh 140W 双向快充', price:459, oldPrice:599, sold:6789, tag:'sale', tagText:'促销' },
+];
+
+// ===== 购物车状态 =====
+let cart = [];
+let currentSlide = 0;
+const totalSlides = 3;
+
+// ===== 轮播 =====
+function goSlide(n) {
+  currentSlide = n;
+  document.querySelectorAll('.hero-slide').forEach((s,i) => {
+    s.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.hero-dots button').forEach((d,i) => {
+    d.classList.toggle('active', i === n);
+  });
+}
+
+setInterval(() => {
+  currentSlide = (currentSlide + 1) % totalSlides;
+  goSlide(currentSlide);
+}, 4000);
+
+// ===== 渲染商品 =====
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = products.map((p,i) => `
+    <div class="product-card">
+      <div class="img-wrap">
+        ${p.icon}
+        <span class="tag tag-${p.tag}">${p.tagText}</span>
+      </div>
+      <div class="info">
+        <div class="name">${p.name}</div>
+        <div class="meta">
+          <span class="price"><span class="unit">¥</span>${p.price}</span>
+          <span class="old-price">¥${p.oldPrice}</span>
+        </div>
+        <div class="sales">已售 ${p.sold.toLocaleString()} 件</div>
+        <div class="shop">🏪 TechNova Store</div>
+        <button class="add-cart-btn" onclick="addToCart(${i})">加入购物车</button>
+      </div>
+    </div>
+  `);
+}
+
+// ===== 购物车操作 =====
+function addToCart(index) {
+  const p = products[index];
+  const existing = cart.find(c => c.index === index);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ index, qty: 1 });
+  }
+  updateCart();
+  showToast(`已添加：${p.name.substring(0, 18)}...`);
+}
+
+function removeFromCart(index) {
+  cart = cart.filter(c => c.index !== index);
+  updateCart();
+}
+
+function changeQty(index, delta) {
+  const item = cart.find(c => c.index === index);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) {
+    removeFromCart(index);
+    return;
+  }
+  updateCart();
+}
+
+function updateCart() {
+  const badge = document.getElementById('cartBadge');
+  const totalItems = cart.reduce((s, c) => s + c.qty, 0);
+  badge.textContent = totalItems;
+
+  const itemsDiv = document.getElementById('cartItems');
+  const totalEl = document.getElementById('cartTotal');
+
+  if (cart.length === 0) {
+    itemsDiv.innerHTML = '<div class="cart-empty">购物车是空的</div>';
+    totalEl.textContent = '¥0.00';
+    return;
+  }
+
+  let total = 0;
+  itemsDiv.innerHTML = cart.map(c => {
+    const p = products[c.index];
+    const subtotal = p.price * c.qty;
+    total += subtotal;
+    return `
+      <div class="cart-item">
+        <div class="ci-icon">${p.icon}</div>
+        <div class="ci-info">
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-price">¥${(p.price * c.qty).toLocaleString()}</div>
+          <div class="ci-qty">
+            <button onclick="changeQty(${c.index}, -1)">−</button>
+            <span>${c.qty}</span>
+            <button onclick="changeQty(${c.index}, 1)">+</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  totalEl.textContent = '¥' + total.toLocaleString();
+}
+
+function toggleCart() {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+
+function checkout() {
+  if (cart.length === 0) {
+    showToast('购物车是空的，先去逛逛吧~');
+    return;
+  }
+  const total = cart.reduce((s, c) => s + products[c.index].price * c.qty, 0);
+  showToast(`订单已提交！共 ¥${total.toLocaleString()}（演示）`);
+  cart = [];
+  updateCart();
+  toggleCart();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ===== 模态框 =====
+let currentModal = null;
+
+function openModal(type) {
+  const overlay = document.getElementById('modalOverlay');
+  const loginModal = document.getElementById('loginModal');
+  const registerModal = document.getElementById('registerModal');
+
+  loginModal.style.display = type === 'login' ? 'block' : 'none';
+  registerModal.style.display = type === 'register' ? 'block' : 'none';
+  currentModal = type;
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay')) return;
+  const overlay = document.getElementById('modalOverlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  currentModal = null;
+
+  // 清空表单
+  document.querySelectorAll('#loginModal input, #registerModal input').forEach(el => el.value = '');
+}
+
+function switchModal(type) {
+  document.getElementById('loginModal').style.display = type === 'login' ? 'block' : 'none';
+  document.getElementById('registerModal').style.display = type === 'register' ? 'block' : 'none';
+  currentModal = type;
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const user = document.getElementById('loginUser').value.trim();
+  if (!user) return;
+  showToast(`欢迎回来，${user}！（演示）`);
+  closeModal();
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  const user = document.getElementById('regUser').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const pass2 = document.getElementById('regPass2').value;
+  if (pass !== pass2) {
+    showToast('两次密码输入不一致');
+    return;
+  }
+  showToast(`注册成功，欢迎 ${user}！（演示）`);
+  switchModal('login');
+}
+
+// ===== 初始化 =====
+renderProducts();
+updateCart();
+</script>
+</body>
+</html>
